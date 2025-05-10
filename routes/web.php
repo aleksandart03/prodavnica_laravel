@@ -5,11 +5,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\AdminHomeController;
+
+use App\Http\Middleware\Admin;
 use Illuminate\Support\Facades\Auth;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/dashboard', function () {
     if (Auth::check() && Auth::user()->usertype === 'admin') {
@@ -26,8 +27,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('admin/dashboard', [HomeController::class, 'index'])->name('admin.dashboard');
-
+    Route::get('admin/dashboard', [AdminHomeController::class, 'index'])->name('admin.dashboard');
     // Products
     Route::get('admin/products', [ProductController::class, 'index'])->name('admin.products');
     Route::get('admin/products/create', [ProductController::class, 'create'])->name('admin.products.create');
