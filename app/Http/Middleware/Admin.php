@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
+use App\Enums\UserType;
 
 class Admin
 {
@@ -16,7 +17,7 @@ class Admin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::check() || Auth::user()->usertype !== 'admin') {
+        if (!Auth::check() || Auth::user()->usertype !== UserType::Admin) {
             return redirect('/dashboard')->with('error', 'You are not allowed to access this page.');
         }
 

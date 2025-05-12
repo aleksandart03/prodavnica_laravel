@@ -1,50 +1,60 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Edit Product') }}
-        </h2>
-    </x-slot>
+@extends('layouts.breeze.app')
 
-    <div class="py-12">
-        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white shadow-sm rounded-lg p-6">
-                <form action="{{ route('admin.products.update', $product->id) }}" method="POST">
-                    @csrf
-                    @method('PUT')
+@section('header')
+<h2 class="font-semibold text-xl text-gray-800 leading-tight">
+    {{ __('Edit Product') }}
+</h2>
+@endsection
 
-                    <div class="mb-4">
-                        <label class="block text-gray-700 font-bold mb-2">Name</label>
-                        <input type="text" name="name" class="form-input w-full" value="{{ old('name', $product->name) }}" required>
-                        @error('name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                    </div>
+@section('content')
+<div class="py-12">
+    <div class="container-xl">
+        <div class="bg-white shadow-sm rounded-lg p-6">
+            <form action="{{ route('admin.products.update', $product->id) }}" method="POST">
+                @csrf
+                @method('PUT')
 
-                    <div class="mb-4">
-                        <label class="block text-gray-700 font-bold mb-2">Price</label>
-                        <input type="number" step="0.01" name="price" class="form-input w-full" value="{{ old('price', $product->price) }}" required>
-                        @error('price') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                    </div>
+                <!-- Name Field -->
+                <div class="mb-4">
+                    <label for="name" class="form-label">Product Name</label>
+                    <input type="text" id="name" name="name" class="form-control" value="{{ old('name', $product->name) }}" required>
+                    @error('name') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
+                </div>
 
-                    <div class="mb-4">
-                        <label class="block text-gray-700 font-bold mb-2">Description</label>
-                        <textarea name="description" class="form-textarea w-full" rows="4" required>{{ old('description', $product->description) }}</textarea>
-                        @error('description') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                    </div>
+                <!-- Price Field -->
+                <div class="mb-4">
+                    <label for="price" class="form-label">Price</label>
+                    <input type="number" id="price" name="price" step="0.01" class="form-control" value="{{ old('price', $product->price) }}" required>
+                    @error('price') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
+                </div>
 
-                    <div class="mb-4">
-                        <label class="block text-gray-700 font-bold mb-2">Category</label>
-                        <select name="category_id" class="form-select w-full" required>
-                            @foreach($categories as $category)
-                            <option value="{{ $category->id }}" {{ old('category_id', $product->category_id) == $category->id ? 'selected' : '' }}>
-                                {{ $category->name }}
-                            </option>
-                            @endforeach
-                        </select>
-                        @error('category_id') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                    </div>
+                <!-- Description Field -->
+                <div class="mb-4">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea id="description" name="description" class="form-control" rows="4" required>{{ old('description', $product->description) }}</textarea>
+                    @error('description') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
+                </div>
 
-                    <button type="submit" class="btn btn-success">Update Product</button>
-                </form>
-            </div>
+                <!-- Category Field -->
+                <div class="mb-4">
+                    <label for="category_id" class="form-label">Category</label>
+                    <select name="category_id" id="category_id" class="form-select" required>
+                        @foreach($categories as $category)
+                        <option value="{{ $category->id }}" {{ old('category_id', $product->category_id) == $category->id ? 'selected' : '' }}>
+                            {{ $category->name }}
+                        </option>
+                        @endforeach
+                    </select>
+                    @error('category_id') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="d-flex justify-content-between align-items-center">
+                    <a href="{{ route('admin.products') }}" class="btn btn-outline-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Update Product</button>
+                </div>
+            </form>
         </div>
     </div>
-</x-app-layout>
+</div>
+@endsection

@@ -1,31 +1,40 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Admin Categories') }}
-        </h2>
+@extends('layouts.breeze.app')
 
-        <div class="mt-4">
-            <a href="{{ route('admin.products') }}" class="btn btn-primary mr-2">Products</a>
-            <a href="{{ route('admin.dashboard') }}" class="btn btn-primary">Back</a>
-        </div>
-    </x-slot>
+@section('header')
+<div class="d-flex justify-content-between align-items-center">
+    <h2 class="font-semibold text-3xl text-gray-800 leading-tight">
+        {{ __('Admin Categories') }}
+    </h2>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <h1 class="mb-0">Category List</h1>
-                        <a href="{{ route('admin.categories.create') }}" class="btn btn-primary">Add Category</a>
-                    </div>
-                    <hr />
-                    @if(Session::has('success'))
-                    <div class="alert alert-success" role="alert">
-                        {{ Session::get('success') }}
-                    </div>
-                    @endif
-                    <table class="table table-hover">
-                        <thead class="table-primary">
+    <div class="btn-group">
+        <a href="{{ route('admin.products') }}" class="btn btn-outline-primary me-3">Products</a>
+        <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-secondary">Back</a>
+    </div>
+</div>
+@endsection
+
+@section('content')
+<div class="py-12">
+    <div class="container-xl">
+        <div class="card shadow-lg border-0 rounded-4 mt-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1 class="mb-0 text-dark">Category List</h1>
+                    <a href="{{ route('admin.categories.create') }}" class="btn btn-lg btn-primary">Add Category</a>
+                </div>
+
+                <hr class="my-5" />
+
+                @if(Session::has('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ Session::get('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @endif
+
+                <div class="table-responsive mt-4">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead class="table-dark">
                             <tr>
                                 <th>#</th>
                                 <th>Name</th>
@@ -38,12 +47,12 @@
                                 <td class="align-middle">{{ $loop->iteration }}</td>
                                 <td class="align-middle">{{ $category->name }}</td>
                                 <td class="align-middle">
-                                    <div class="btn-group" role="group" aria-label="Actions">
-                                        <a href="{{ route('admin.categories.edit', $category->id) }}" class="btn btn-secondary">Edit</a>
-                                        <form action="{{ route('admin.categories.delete', $category->id) }}" method="POST" onsubmit="return confirm('Are you sure?')">
+                                    <div class="btn-group" role="group">
+                                        <a href="{{ route('admin.categories.edit', $category->id) }}" class="btn btn-outline-warning btn-sm">Edit</a>
+                                        <form action="{{ route('admin.categories.delete', $category->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this category?')">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                            <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
                                         </form>
                                     </div>
                                 </td>
@@ -59,4 +68,5 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+</div>
+@endsection

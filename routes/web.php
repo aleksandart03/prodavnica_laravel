@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\AdminHomeController;
+use App\Enums\UserType;
 
 use App\Http\Middleware\Admin;
 use Illuminate\Support\Facades\Auth;
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/dashboard', function () {
-    if (Auth::check() && Auth::user()->usertype === 'admin') {
+    if (!Auth::check() || Auth::user()->usertype == UserType::Admin) {
         return redirect()->route('admin.dashboard');
     }
 
