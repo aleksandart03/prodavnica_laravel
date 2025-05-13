@@ -22,7 +22,10 @@
                         <h5 class="card-title">{{ __('Quick Access') }}</h5>
                         <ul class="list-unstyled">
                             <li><a href="{{ route('profile.edit') }}" class="btn btn-link">{{ __('Edit Profile') }}</a></li>
-                            <li><a href="{{ route('logout') }}" class="btn btn-link">{{ __('Log Out') }}</a></li>
+                            <form method="POST" action="{{ route('logout') }}" class="d-inline">
+                                @csrf
+                                <a><button type="submit" class="primary-btn">{{ __('Log Out') }}</button></a>
+                            </form>
                         </ul>
                     </div>
                 </div>

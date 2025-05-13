@@ -15,21 +15,30 @@
 
             <ul class="navbar-nav mx-auto text-center">
                 <li class="nav-item me-4">
-                    <a class="nav-link active" href="#"><i class="bi bi-house-door"></i> Home</a>
+                    <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">
+                        <i class="bi bi-house-door"></i> Home
+                    </a>
                 </li>
                 <li class="nav-item me-4">
-                    <a class="nav-link" href="#"><i class="bi bi-box"></i> Products</a>
+                    <a class="nav-link {{ request()->routeIs('products.index') ? 'active' : '' }}" href="{{ route('products.index') }}">
+                        <i class="bi bi-box"></i> Products
+                    </a>
                 </li>
                 <li class="nav-item me-4">
-                    <a class="nav-link" href="#"><i class="bi bi-list"></i> Categories</a>
+                    <a class="nav-link {{ request()->routeIs('categories.index') ? 'active' : '' }}" href="{{ route('categories.index') }}">
+                        <i class="bi bi-list"></i> Categories
+                    </a>
                 </li>
                 <li class="nav-item me-4">
-                    <a class="nav-link" href="#"><i class="bi bi-info-circle"></i> About Us</a>
+                    <a class="nav-link {{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">
+                        <i class="bi bi-info-circle"></i> About Us
+                    </a>
                 </li>
             </ul>
 
+
             <div class="d-flex align-items-center justify-content-center justify-content-lg-end mt-2 mt-lg-0">
-                <a href="#" class="me-3 d-flex align-items-center">
+                <a href="{{ route ('cart.index') }}" class="me-3 d-flex align-items-center">
                     <i class="bi bi-cart fs-4"></i>
                 </a>
 

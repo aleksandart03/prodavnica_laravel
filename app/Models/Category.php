@@ -8,7 +8,6 @@ use Illuminate\Testing\Fluent\Concerns\Has;
 
 class Category extends Model
 {
-
     use HasFactory;
 
     protected $fillable = [
