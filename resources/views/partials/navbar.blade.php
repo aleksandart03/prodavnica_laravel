@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm postion-fixed">
     <div class="container-fluid px-2 px-lg-5">
 
         <a class="navbar-brand d-flex align-items-center gap-2" href="#">
@@ -43,10 +43,28 @@
                 </a>
 
                 @auth
-                <a href="{{ route('dashboard') }}" class="me-3 d-flex align-items-center">
-                    <button class="btn btn-primary">Dashboard</button>
-                </a>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle fw-bold text-info d-flex align-items-center gap-1" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle"></i> Profile
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li>
+                                <a class="dropdown-item" href="{{ route('dashboard') }}">Dashboard</a>
+                            </li>
+                            <li>
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item">Log Out</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
                 @endauth
+
+
 
                 @guest
                 @if (Route::has('login'))
@@ -61,6 +79,9 @@
                 </a>
                 @endif
                 @endguest
+
+
+
             </div>
         </div>
     </div>

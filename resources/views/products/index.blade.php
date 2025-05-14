@@ -29,6 +29,10 @@
                             <i class="bi bi-cart-plus"></i> Add to Cart
                         </button>
                     </form>
+
+                    <a href="{{ route('products.show', $product->id) }}" class="btn btn-outline-secondary w-100 mt-2">
+                        <i class="bi bi-info-circle"></i> Show Details
+                    </a>
                 </div>
             </div>
         </div>

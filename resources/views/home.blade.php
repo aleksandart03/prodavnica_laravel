@@ -104,7 +104,7 @@
         </div>
     </div>
     <div class="container mt-5">
-        <h3 class="mb-4">Our Products</h3>
+        <h3 class="mb-4">New Products</h3>
 
         @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
@@ -118,7 +118,7 @@
                         @if($product->image)
                         <img src="{{ asset('storage/' . $product->image) }}" class="card-img-top" alt="{{ $product->name }}" style="height: 200px; object-fit: cover;">
                         @else
-                        <img src="{{ asset('images/default.webp') }}" class="card-img-top" alt="No Image" style="height: 200px; object-fit: cover;">
+                        <img src="{{ asset('images/default.webp') }}" class="card-img-top" alt="No Image" style="height: 300px; width:100%; object-fit: cover;">
                         @endif
 
                         <div class="card-body d-flex flex-column justify-content-between">
@@ -132,6 +132,10 @@
                                     <i class="bi bi-cart-plus"></i> Add to Cart
                                 </button>
                             </form>
+
+                            <a href="{{ route('products.show', $product->id) }}" class="btn btn-outline-secondary w-100 mt-2">
+                                <i class="bi bi-info-circle"></i> Show Details
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -140,10 +144,9 @@
 
             <div class="text-center mt-4">
                 <a href="{{ route('products.index') }}" class="btn btn-outline-primary btn-lg">
-                    Pogledajte sve proizvode
+                    Go to Products
                 </a>
             </div>
-
         </div>
     </div>
 

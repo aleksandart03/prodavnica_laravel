@@ -29,15 +29,12 @@
 
                     <td class="text-center align-middle">
                         <div class="d-inline-flex justify-content-center input-group input-group-sm" style="width: 120px;">
-
                             <form action="{{ route('cart.decrease', $product->id) }}" method="POST">
                                 @csrf
                                 @method('PATCH')
                                 <button class="btn btn-outline-secondary" type="submit">−</button>
                             </form>
-
                             <span class="input-group-text bg-white">{{ $product->pivot->quantity }}</span>
-
                             <form action="{{ route('cart.increase', $product->id) }}" method="POST">
                                 @csrf
                                 @method('PATCH')
@@ -46,19 +43,20 @@
                         </div>
                     </td>
 
-
                     <td>${{ number_format($product->price, 2) }}</td>
                     <td>${{ number_format($product->price * $product->pivot->quantity, 2) }}</td>
                     <td>
-                        <form action="{{ route('cart.remove', $product->id) }}" method="POST">
+                        <form action="{{ route('cart.remove', $product->id) }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
-                            <button class="btn btn-danger btn-sm">Remove</button>
+                            <button class="btn btn-link text-danger p-0" title="Remove">
+                                <i class="bi bi-trash-fill fs-5"></i>
+                            </button>
                         </form>
+
                     </td>
                 </tr>
                 @endforeach
-
             </tbody>
         </table>
     </div>
@@ -75,6 +73,12 @@
                 return $product->price * $product->pivot->quantity;
             }), 2) }}</h4>
         </div>
+    </div>
+
+    <div class="mt-4">
+        <a href="{{ route('checkout.form') }}" class="btn btn-lg btn-success w-100 rounded-3 shadow-lg" style="transition: transform 0.3s, background-color 0.3s;" onmouseover="this.style.transform='scale(1.05)'; this.style.backgroundColor='#28a745';" onmouseout="this.style.transform='scale(1)'; this.style.backgroundColor='#28a745';">
+            <strong>Proceed to Checkout</strong>
+        </a>
     </div>
 
     @else
