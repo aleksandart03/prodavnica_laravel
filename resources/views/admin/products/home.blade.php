@@ -21,7 +21,21 @@
 
                 <div class="d-flex justify-content-between align-items-center mb-4 mt-3">
                     <h1 class="mb-0 text-dark">Product List</h1>
-                    <a href="{{ route('admin.products.create') }}" class="btn btn-lg btn-primary">Add Product</a>
+                    <div class="btn-group">
+                        <a href="{{ route('admin.products.create') }}" class="btn btn-primary">Add Product</a>
+
+                        {{-- Export --}}
+                        <a href="{{ route('admin.products.export') }}" class="btn btn-outline-success ms-2">Export</a>
+
+                        {{-- Import Form --}}
+                        <form action="{{ route('admin.products.import') }}" method="POST" enctype="multipart/form-data" class="d-inline-block ms-2">
+                            @csrf
+                            <div class="input-group">
+                                <input type="file" name="file" class="form-control" required>
+                                <button type="submit" class="btn btn-outline-primary">Import</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
 
                 <hr class="my-4" />
@@ -48,7 +62,8 @@
                         <tbody>
                             @forelse ($products as $product)
                             <tr>
-                                <td>{{ $loop->iteration }}</td>
+                                <td class="align-middle">{{ $loop->iteration + $products->firstItem() - 1 }}</td>
+
                                 <td>{{ $product->name }}</td>
                                 <td>{{ $product->category->name ?? 'No Category' }}</td>
                                 <td>{{ number_format($product->price, 2) }}</td>
@@ -71,6 +86,10 @@
                             @endforelse
                         </tbody>
                     </table>
+
+                    <div class="d-flex justify-content-center mt-4">
+                        {{ $products->links() }}
+                    </div>
                 </div>
 
             </div>

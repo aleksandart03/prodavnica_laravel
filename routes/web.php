@@ -33,14 +33,13 @@ Route::delete('/cart/remove/{product}', [CartController::class, 'removeProductFr
 Route::patch('/cart/increase/{product}', [CartController::class, 'increaseQuantity'])->name('cart.increase');
 Route::patch('/cart/decrease/{product}', [CartController::class, 'decreaseQuantity'])->name('cart.decrease');
 Route::delete('/cart/clear', [CartController::class, 'clearCart'])->name('cart.clear');
+Route::patch('/cart/update/{product}', [CartController::class, 'updateQuantity'])->name('cart.update');
 
 //checkout
 
 Route::get('/checkout', [OrderController::class, 'checkoutForm'])->name('checkout.form');
 Route::post('/checkout', [OrderController::class, 'processCheckout'])->name('checkout.process');
 Route::get('/checkout/confirmed', [OrderController::class, 'checkoutConfirmed'])->name('checkout.confirmed');
-
-
 
 
 Route::get('/dashboard', function () {
@@ -59,6 +58,8 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('admin/dashboard', [AdminHomeController::class, 'index'])->name('admin.dashboard');
+
+
     // Products
     Route::get('admin/products', [AdminProductController::class, 'index'])->name('admin.products');
     Route::get('admin/products/create', [AdminProductController::class, 'create'])->name('admin.products.create');
@@ -74,7 +75,17 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('admin/categories/edit/{id}', [AdminCategoryController::class, 'edit'])->name('admin.categories.edit');
     Route::put('admin/categories/edit/{id}', [AdminCategoryController::class, 'update'])->name('admin.categories.update');
     Route::delete('admin/categories/delete/{id}', [AdminCategoryController::class, 'delete'])->name('admin.categories.delete');
+
+    // Import/Export Products
+    Route::get('admin/products/export', [AdminProductController::class, 'export'])->name('admin.products.export');
+    Route::post('admin/products/import', [AdminProductController::class, 'import'])->name('admin.products.import');
+    Route::get('categories/export', [AdminCategoryController::class, 'export'])->name('categories.export');
+    Route::post('categories/import', [AdminCategoryController::class, 'import'])->name('categories.import');
 });
+
+//Products search
+
+Route::get('/search-products', [ProductController::class, 'search'])->name('products.search');
 
 
 

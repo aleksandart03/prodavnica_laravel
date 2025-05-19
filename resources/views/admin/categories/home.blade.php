@@ -18,10 +18,25 @@
     <div class="container-xl">
         <div class="card shadow-lg border-0 rounded-4 mt-4">
             <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-4 mt-3">
                     <h1 class="mb-0 text-dark">Category List</h1>
-                    <a href="{{ route('admin.categories.create') }}" class="btn btn-lg btn-primary">Add Category</a>
+                    <div class="btn-group">
+                        <a href="{{ route('admin.categories.create') }}" class="btn btn-primary">Add Category</a>
+
+                        {{-- Export --}}
+                        <a href="{{ route('categories.export') }}" class="btn btn-outline-success ms-2">Export</a>
+
+                        {{-- Import Form --}}
+                        <form action="{{ route('categories.import') }}" method="POST" enctype="multipart/form-data" class="d-inline-block ms-2">
+                            @csrf
+                            <div class="input-group">
+                                <input type="file" name="file" class="form-control" required>
+                                <button type="submit" class="btn btn-outline-primary">Import</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
+
 
                 <hr class="my-5" />
 
@@ -44,7 +59,7 @@
                         <tbody>
                             @forelse ($categories as $category)
                             <tr>
-                                <td class="align-middle">{{ $loop->iteration }}</td>
+                                <td class="align-middle">{{ $category->id }}</td>
                                 <td class="align-middle">{{ $category->name }}</td>
                                 <td class="align-middle">
                                     <div class="btn-group" role="group">
@@ -64,6 +79,10 @@
                             @endforelse
                         </tbody>
                     </table>
+                    <div class="d-flex justify-content-center mt-4">
+                        {{ $categories->links() }}
+                    </div>
+
                 </div>
             </div>
         </div>

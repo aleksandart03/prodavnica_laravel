@@ -4,11 +4,7 @@
 <div class="container mt-5">
     <h3 class="mb-4">Your Cart</h3>
 
-    @if(session('success'))
-    <div class="alert alert-success mb-4">
-        {{ session('success') }}
-    </div>
-    @endif
+    <div id="ajax-message"></div>
 
     @if($cart && $cart->products->isNotEmpty())
     <div class="table-responsive">
@@ -23,19 +19,39 @@
                 </tr>
             </thead>
             <tbody>
+
+                <!-- ========== Style za input da se ne vide strelice ========== -->
+
+                <style>
+                    input[type=number]::-webkit-inner-spin-button,
+                    input[type=number]::-webkit-outer-spin-button {
+                        -webkit-appearance: none;
+                        margin: 0;
+                    }
+                </style>
+
                 @foreach($cart->products as $product)
-                <tr>
-                    <td>{{ $product->name }}</td>
+                <tr id="product-row-{{ $product->id }}">
+                    <td class="d-flex align-items-center gap-3">
+                        <a href="{{ route('products.show', $product->id) }}" class="btn btn-outline-secondary border-0 p-0" style="width: 60px; height: 60px; flex-shrink: 0;">
+                            @if($product->image)
+                            <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;">
+                            @else
+                            <img src="{{ asset('images/default.webp') }}" alt="Default Image" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;">
+                            @endif
+                        </a>
+                        <span>{{ $product->name }}</span>
+                    </td>
 
                     <td class="text-center align-middle">
                         <div class="d-inline-flex justify-content-center input-group input-group-sm" style="width: 120px;">
-                            <form action="{{ route('cart.decrease', $product->id) }}" method="POST">
+                            <form action="{{ route('cart.decrease', $product->id) }}" method="POST" class="ajax-cart-action" data-product-id="{{ $product->id }}">
                                 @csrf
                                 @method('PATCH')
                                 <button class="btn btn-outline-secondary" type="submit">−</button>
                             </form>
-                            <span class="input-group-text bg-white">{{ $product->pivot->quantity }}</span>
-                            <form action="{{ route('cart.increase', $product->id) }}" method="POST">
+                            <input type="number" min="1" class="form-control text-center quantity-input" style="max-width: 60px;" data-product-id="{{ $product->id }}" value="{{ $product->pivot->quantity }}">
+                            <form action="{{ route('cart.increase', $product->id) }}" method="POST" class="ajax-cart-action" data-product-id="{{ $product->id }}">
                                 @csrf
                                 @method('PATCH')
                                 <button class="btn btn-outline-secondary" type="submit">+</button>
@@ -44,34 +60,36 @@
                     </td>
 
                     <td>${{ number_format($product->price, 2) }}</td>
-                    <td>${{ number_format($product->price * $product->pivot->quantity, 2) }}</td>
+                    <td id="item-total-{{ $product->id }}">${{ number_format($product->price * $product->pivot->quantity, 2) }}</td>
+
                     <td>
-                        <form action="{{ route('cart.remove', $product->id) }}" method="POST" class="d-inline">
+                        <form action="{{ route('cart.remove', $product->id) }}" method="POST" class="ajax-cart-action d-inline" data-product-id="{{ $product->id }}">
                             @csrf
                             @method('DELETE')
                             <button class="btn btn-link text-danger p-0" title="Remove">
                                 <i class="bi bi-trash-fill fs-5"></i>
                             </button>
                         </form>
-
                     </td>
                 </tr>
                 @endforeach
+
             </tbody>
+
         </table>
     </div>
 
     <div class="d-flex justify-content-between">
-        <form action="{{ route('cart.clear') }}" method="POST">
+        <form action="{{ route('cart.clear') }}" method="POST" class="ajax-cart-action">
             @csrf
             @method('DELETE')
             <button class="btn btn-warning">Clear Cart</button>
         </form>
-
         <div>
-            <h4>Total: ${{ number_format($cart->products->sum(function($product) {
-                return $product->price * $product->pivot->quantity;
-            }), 2) }}</h4>
+            <h4>Total: $<span id="cart-total">
+                    {{ number_format($cart->products->sum(fn($product) => $product->price * $product->pivot->quantity), 2) }}
+                </span></h4>
+
         </div>
     </div>
 
@@ -86,3 +104,9 @@
     @endif
 </div>
 @endsection
+
+
+@push('scripts')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{{ asset('js/custom.js') }}"></script>
+@endpush

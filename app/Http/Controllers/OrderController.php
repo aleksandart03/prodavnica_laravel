@@ -46,19 +46,24 @@ class OrderController extends Controller
             'total_price' => $total,
         ]);
 
+        $data = [];
+
         foreach ($cart->products as $product) {
-            OrderProduct::create([
+            $data[] = [
                 'order_id' => $order->id,
                 'product_id' => $product->id,
                 'quantity' => $product->pivot->quantity,
                 'price' => $product->price,
-            ]);
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
         }
+
+        OrderProduct::insert($data);
 
         $cart->products()->detach();
         $cart->delete();
         Cookie::queue(Cookie::forget('cart_id'));
-
 
         return redirect()->route('checkout.confirmed')->with('order', $order);
     }
