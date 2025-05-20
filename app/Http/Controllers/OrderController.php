@@ -13,6 +13,11 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
+    public function show(Order $order)
+    {
+        return view('orders.show ', compact('order'));
+    }
+
     public function checkoutForm()
     {
         return view('checkout.home');

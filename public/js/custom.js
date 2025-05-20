@@ -129,6 +129,43 @@ $(document).on('submit', '.ajax-cart-action', function(e) {
     });
 });
 
+$(document).on('change', '.quantity-input', function() {
+    let input = $(this);
+    let newQty = parseInt(input.val());
+    let productId = input.data('product-id');
+
+    if (isNaN(newQty) || newQty < 1) {
+        newQty = 1;
+        input.val(newQty);
+    }
+
+    $.ajax({
+        url: `/cart/update/${productId}`,  
+        method: 'PATCH',
+        data: {
+            _token: $('meta[name="csrf-token"]').attr('content'),
+            quantity: newQty
+        },
+        success: function(response) {
+            showMessage(`
+                <div class="alert alert-success text-center" role="alert">
+                    ${response.message}
+                </div>
+            `);
+
+            $(`#item-total-${productId}`).text(`$${response.item_total}`);
+            $('#cart-total').text(response.cart_total);
+        },
+        error: function() {
+            showMessage(`
+                <div class="alert alert-danger text-center" role="alert">
+                    Could not update quantity.
+                </div>
+            `);
+        }
+    });
+});
+
 
 
 

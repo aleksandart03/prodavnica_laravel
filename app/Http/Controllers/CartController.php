@@ -8,6 +8,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class CartController extends Controller
 {
@@ -44,6 +45,12 @@ class CartController extends Controller
         } else {
             $cart->products()->attach($productId, ['quantity' => 1]);
         }
+
+        Log::info('Product added to cart', [
+            'cart_id' => $cart->id,
+            'product_id' => $productId,
+            'quantity' => $existing ? 'incremented by 1' : 1,
+        ]);
 
         if ($request->ajax()) {
             return response()->json(['message' => 'Product added to cart!']);

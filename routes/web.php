@@ -87,6 +87,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 Route::get('/search-products', [ProductController::class, 'search'])->name('products.search');
 
+Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+
+
 
 
 require __DIR__ . '/auth.php';
